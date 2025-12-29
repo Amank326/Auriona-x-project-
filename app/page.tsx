@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { Brain, Heart, Sparkles, Users, Globe, Shield, Activity, MessageCircle, ArrowRight, Menu, X } from "lucide-react"
 import Link from "next/link"
 import Scene3D from "@/components/Scene3D"
+import Hero3D from "@/components/Hero3D"
 import AIBot from "@/components/AIBot"
 
 export default function AurionaHome() {
@@ -147,12 +148,13 @@ export default function AurionaHome() {
 
       {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center px-6 md:px-8 relative">
-        <div className="max-w-6xl mx-auto text-center space-y-8 relative z-10">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
+          {/* Left side - Text content */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="space-y-6"
+            className="space-y-8"
           >
             <motion.div
               initial={{ scale: 0.5, opacity: 0 }}
@@ -160,21 +162,21 @@ export default function AurionaHome() {
               transition={{ duration: 0.5 }}
               className="inline-block"
             >
-              <span className="px-6 py-2 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-600/30 rounded-full text-sm font-medium text-purple-600">
+              <span className="px-6 py-2 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-600/30 rounded-full text-sm font-medium text-purple-600 backdrop-blur-sm">
                 <Sparkles className="w-4 h-4 inline mr-2" />
                 Advanced AI Mental Health Platform
               </span>
             </motion.div>
 
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight">
-              <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+              <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 bg-clip-text text-transparent animate-gradient">
                 Mental Wellness
               </span>
               <br />
               <span className="text-foreground">Reimagined</span>
             </h1>
 
-            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
               Auriona combines cutting-edge AI technology with compassionate care to provide world-class 
               mental health support. Trusted by leading organizations like NASA and ISRO for astronaut 
               psychological wellbeing.
@@ -184,20 +186,20 @@ export default function AurionaHome() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center pt-6"
+              className="flex flex-col sm:flex-row gap-4 pt-6"
             >
               <motion.button
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(168, 85, 247, 0.4)" }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-medium flex items-center justify-center gap-2 shadow-xl shadow-purple-600/30"
+                className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-medium flex items-center justify-center gap-2 shadow-xl shadow-purple-600/30 hover:shadow-purple-600/50 transition-all"
               >
                 Talk to Auriona AI
                 <MessageCircle className="w-5 h-5" />
               </motion.button>
               <motion.button
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, borderColor: "rgb(168, 85, 247)" }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-card hover:bg-card/80 text-foreground border border-border rounded-full font-medium flex items-center justify-center gap-2"
+                className="px-8 py-4 bg-card/50 backdrop-blur-sm hover:bg-card/80 text-foreground border-2 border-border rounded-full font-medium flex items-center justify-center gap-2 transition-all"
               >
                 Explore Platform
                 <ArrowRight className="w-5 h-5" />
@@ -209,27 +211,57 @@ export default function AurionaHome() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="grid grid-cols-3 gap-8 max-w-3xl mx-auto pt-12"
+              className="grid grid-cols-3 gap-6 pt-8"
             >
-              <div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="p-4 rounded-2xl bg-gradient-to-br from-purple-600/10 to-pink-600/10 backdrop-blur-sm border border-purple-600/20 hover:border-purple-600/40 transition-all cursor-pointer"
+              >
                 <h3 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                   24/7
                 </h3>
-                <p className="text-sm text-muted-foreground">Available Support</p>
-              </div>
-              <div>
+                <p className="text-xs md:text-sm text-muted-foreground mt-1">Available Support</p>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="p-4 rounded-2xl bg-gradient-to-br from-cyan-600/10 to-blue-600/10 backdrop-blur-sm border border-cyan-600/20 hover:border-cyan-600/40 transition-all cursor-pointer"
+              >
                 <h3 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
                   99.9%
                 </h3>
-                <p className="text-sm text-muted-foreground">User Satisfaction</p>
-              </div>
-              <div>
+                <p className="text-xs md:text-sm text-muted-foreground mt-1">User Satisfaction</p>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="p-4 rounded-2xl bg-gradient-to-br from-green-600/10 to-emerald-600/10 backdrop-blur-sm border border-green-600/20 hover:border-green-600/40 transition-all cursor-pointer"
+              >
                 <h3 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
                   150+
                 </h3>
-                <p className="text-sm text-muted-foreground">Countries Served</p>
-              </div>
+                <p className="text-xs md:text-sm text-muted-foreground mt-1">Countries Served</p>
+              </motion.div>
             </motion.div>
+          </motion.div>
+
+          {/* Right side - 3D Interactive Element */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="relative"
+          >
+            <Hero3D />
+            <motion.div
+              animate={{
+                boxShadow: [
+                  "0 0 60px rgba(168, 85, 247, 0.3)",
+                  "0 0 100px rgba(236, 72, 153, 0.4)",
+                  "0 0 60px rgba(168, 85, 247, 0.3)",
+                ],
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute inset-0 rounded-full blur-3xl -z-10"
+            />
           </motion.div>
         </div>
 
