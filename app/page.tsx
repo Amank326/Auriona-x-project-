@@ -94,11 +94,14 @@ export default function AurionaHome() {
             <Link href="#mission" className="text-sm hover:text-purple-600 transition">
               Mission
             </Link>
-            <Link href="#technology" className="text-sm hover:text-purple-600 transition">
-              Technology
-            </Link>
-            <Link href="#resources" className="text-sm hover:text-purple-600 transition">
+            <Link href="/resources" className="text-sm hover:text-purple-600 transition">
               Resources
+            </Link>
+            <Link href="/dashboard" className="text-sm hover:text-purple-600 transition">
+              Dashboard
+            </Link>
+            <Link href="/about" className="text-sm hover:text-purple-600 transition">
+              About
             </Link>
             <motion.button
               whileHover={{ scale: 1.05 }}
