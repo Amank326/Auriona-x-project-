@@ -507,8 +507,8 @@ export default function AurionaHome() {
           
           <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
             <p>© 2025 Auriona. All rights reserved.</p>
-            <p className="text-xs">
-              🚨 If you're in crisis, call 988 (US) or contact emergency services
+            <p className="text-xs text-center">
+              🚨 Crisis Support: US-988 | UK-116 123 | India-1800-599-0019 | International-befrienders.org
             </p>
           </div>
         </div>

@@ -85,8 +85,8 @@ const mentalHealthResponses = {
     "I can share some helpful resources: mindfulness exercises, journaling prompts, connecting with support communities. What interests you most? 📚"
   ],
   emergency: [
-    "⚠️ If you're in crisis, please contact emergency services immediately:\n• National Suicide Prevention Lifeline: 988\n• Crisis Text Line: Text HOME to 741741\n• Emergency: 911\nYour life matters. ❤️",
-    "🚨 I'm concerned about your safety. Please reach out to:\n• Mental health crisis hotline in your area\n• A trusted friend or family member\n• Emergency services\nYou don't have to face this alone. 💙"
+    "⚠️ If you're in crisis, please contact emergency services immediately:\n• US: 988 (Suicide Prevention) or 911\n• UK: 116 123 (Samaritans) or 999\n• India: KIRAN 1800-599-0019\n• International: befrienders.org\nYour life matters. ❤️",
+    "🚨 I'm concerned about your safety. Please reach out to:\n• US: 988 or Crisis Text Line (HOME to 741741)\n• UK: 116 123 (Samaritans)\n• Australia: 13 11 14 (Lifeline)\n• Canada: 1-833-456-4566\n• International resources: findahelpline.com\nYou don't have to face this alone. 💙"
   ],
   default: [
     "I'm here to listen and support you. Could you tell me more about what you're experiencing? 🤗",
@@ -113,8 +113,15 @@ export default function AIBot() {
   const getResponse = (userMessage: string): string => {
     const lowerMessage = userMessage.toLowerCase()
     
-    // Emergency detection
-    if (lowerMessage.includes("suicide") || lowerMessage.includes("kill myself") || lowerMessage.includes("end it all") || lowerMessage.includes("hurt myself")) {
+    // Enhanced emergency detection with more patterns
+    const emergencyKeywords = [
+      "suicide", "suicidal", "kill myself", "end it all", "hurt myself", 
+      "self harm", "want to die", "better off dead", "no reason to live",
+      "ending my life", "take my life"
+    ]
+    const hasEmergencyKeyword = emergencyKeywords.some(keyword => lowerMessage.includes(keyword))
+    
+    if (hasEmergencyKeyword) {
       return mentalHealthResponses.emergency[Math.floor(Math.random() * mentalHealthResponses.emergency.length)]
     }
     
