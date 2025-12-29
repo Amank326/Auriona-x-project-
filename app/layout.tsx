@@ -8,9 +8,9 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Aman Kumar Gupta - Full Stack Developer",
+  title: "Auriona - AI Mental Health Companion",
   description:
-    "Portfolio of Aman Kumar Gupta, a passionate full-stack developer and software engineer specializing in web development, cloud solutions, and IoT projects.",
+    "Auriona is an advanced AI-powered mental health platform providing compassionate care and support 24/7. Trusted by leading organizations like NASA and ISRO for astronaut psychological wellbeing.",
   generator: "v0.app",
   icons: {
     icon: [
