@@ -100,7 +100,10 @@ export default function AIBot() {
   const [messages, setMessages] = useState<Array<{ text: string; isUser: boolean; timestamp: Date }>>([])
   const [input, setInput] = useState("")
   const [isTyping, setIsTyping] = useState(false)
+  const [currentTypingText, setCurrentTypingText] = useState("")
+  const [isRealTimeMode, setIsRealTimeMode] = useState(true) // GitHub Copilot-like real-time mode
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const typingIntervalRef = useRef<NodeJS.Timeout | null>(null)
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -108,7 +111,7 @@ export default function AIBot() {
 
   useEffect(() => {
     scrollToBottom()
-  }, [messages])
+  }, [messages, currentTypingText])
 
   const getResponse = (userMessage: string): string => {
     const lowerMessage = userMessage.toLowerCase()
@@ -158,19 +161,48 @@ export default function AIBot() {
     return mentalHealthResponses.default[Math.floor(Math.random() * mentalHealthResponses.default.length)]
   }
 
+  // Real-time typing effect (GitHub Copilot-style)
+  const typeMessage = (message: string) => {
+    setCurrentTypingText("")
+    setIsTyping(true)
+    let index = 0
+    
+    if (typingIntervalRef.current) {
+      clearInterval(typingIntervalRef.current)
+    }
+    
+    typingIntervalRef.current = setInterval(() => {
+      if (index < message.length) {
+        setCurrentTypingText(prev => prev + message[index])
+        index++
+      } else {
+        clearInterval(typingIntervalRef.current!)
+        setMessages(prev => [...prev, { text: message, isUser: false, timestamp: new Date() }])
+        setCurrentTypingText("")
+        setIsTyping(false)
+      }
+    }, 20) // Fast typing like GitHub Copilot
+  }
+
   const handleSend = () => {
     if (input.trim()) {
       const userMessage = { text: input, isUser: true, timestamp: new Date() }
       setMessages([...messages, userMessage])
       setInput("")
-      setIsTyping(true)
       
-      // Simulate AI thinking
+      // Immediate response start (real-time like GitHub Copilot)
       setTimeout(() => {
         const response = getResponse(input)
-        setMessages(prev => [...prev, { text: response, isUser: false, timestamp: new Date() }])
-        setIsTyping(false)
-      }, 1000 + Math.random() * 1000)
+        if (isRealTimeMode) {
+          typeMessage(response)
+        } else {
+          setIsTyping(true)
+          setTimeout(() => {
+            setMessages(prev => [...prev, { text: response, isUser: false, timestamp: new Date() }])
+            setIsTyping(false)
+          }, 1000)
+        }
+      }, 300) // Quick response time
     }
   }
 
@@ -286,7 +318,23 @@ export default function AIBot() {
                 </motion.div>
               ))}
               
-              {isTyping && (
+              {/* Real-time typing (GitHub Copilot style) */}
+              {currentTypingText && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex justify-start"
+                >
+                  <div className="max-w-[80%] p-3 rounded-2xl bg-card border border-purple-600/50 text-foreground">
+                    <p className="text-sm whitespace-pre-wrap">
+                      {currentTypingText}
+                      <span className="inline-block w-1 h-4 bg-purple-600 ml-0.5 animate-pulse" />
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+              
+              {isTyping && !currentTypingText && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
