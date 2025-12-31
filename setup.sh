@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Setup script for Auriona development environment
 
 echo "🚀 Setting up Auriona development environment..."
@@ -11,6 +11,8 @@ if [ ! -f .env ]; then
 fi
 
 # Install dependencies
+# Note: --legacy-peer-deps is used due to React 19 peer dependency conflicts with some packages
+# This is a temporary workaround until all dependencies update to support React 19
 echo "📦 Installing dependencies..."
 npm install --legacy-peer-deps
 
