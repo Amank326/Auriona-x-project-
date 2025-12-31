@@ -1,13 +1,15 @@
+import path from 'path'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
   images: {
     unoptimized: true,
+  },
+  turbopack: {
+    root: path.join(process.cwd()),
   },
 }
 
