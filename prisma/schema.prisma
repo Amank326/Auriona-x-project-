@@ -1,0 +1,127 @@
+// Prisma schema for Auriona Mental Health Platform
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication and profile
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relations
+  conversations Conversation[]
+  moodEntries   MoodEntry[]
+  goals         Goal[]
+  achievements  Achievement[]
+  sessions      Session[]
+  
+  @@map("users")
+}
+
+// Session model for NextAuth
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("sessions")
+}
+
+// Conversation model for chat history with Scarlett AI
+model Conversation {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  title     String?
+  
+  @@map("conversations")
+}
+
+// Message model for individual chat messages
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           String       // 'user' or 'assistant'
+  content        String       @db.Text
+  timestamp      DateTime     @default(now())
+  
+  @@map("messages")
+  @@index([conversationId])
+}
+
+// Mood tracking model
+model MoodEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mood      Int      // 1-10 scale
+  note      String?  @db.Text
+  createdAt DateTime @default(now())
+  
+  @@map("mood_entries")
+  @@index([userId, createdAt])
+}
+
+// Goals and progress tracking
+model Goal {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String?  @db.Text
+  progress    Int      @default(0) // 0-100 percentage
+  completed   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("goals")
+  @@index([userId])
+}
+
+// Achievement system
+model Achievement {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  icon        String?
+  unlockedAt  DateTime @default(now())
+  
+  @@map("achievements")
+  @@index([userId])
+}
+
+// Resource model (optional - for dynamic resource management)
+model Resource {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  category    String
+  url         String
+  author      String?
+  tags        String[] // Array of tags
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("resources")
+  @@index([category, featured])
+}
