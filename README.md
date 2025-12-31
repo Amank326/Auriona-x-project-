@@ -37,12 +37,21 @@ Auriona combines cutting-edge AI technology with compassionate care to provide w
 ### Prerequisites
 - Node.js 18+ 
 - npm or pnpm
+- PostgreSQL database (for backend features)
 
 ### Installation
 
 ```bash
 # Install dependencies
 npm install --legacy-peer-deps
+
+# Setup environment (first time only)
+cp .env.example .env
+# Update .env with your database URL and secrets
+
+# Setup database (if using backend)
+npm run db:generate
+npm run db:push
 
 # Run development server
 npm run dev
@@ -56,14 +65,23 @@ npm start
 
 Visit `http://localhost:3000` to see the application.
 
+**Note**: For full backend functionality (authentication, chat persistence, mood tracking), see [BACKEND_SETUP.md](./BACKEND_SETUP.md)
+
 ## 🛠️ Technology Stack
 
+### Frontend
 - **Framework**: Next.js 16.0.0 with React 19
 - **3D Graphics**: Three.js, React Three Fiber, @react-three/drei
 - **Animations**: Framer Motion
-- **Styling**: Tailwind CSS
+- **Styling**: Tailwind CSS 4
 - **UI Components**: Radix UI
 - **Icons**: Lucide React
+
+### Backend (Optional)
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: NextAuth.js with JWT
+- **API**: Next.js API Routes
+- **Security**: bcrypt password hashing
 
 ## 📁 Project Structure
 
