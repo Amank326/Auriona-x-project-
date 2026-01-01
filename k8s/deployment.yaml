@@ -1,0 +1,244 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: auriona
+
+---
+# ConfigMap for environment variables
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auriona-config
+  namespace: auriona
+data:
+  NODE_ENV: "production"
+  NEXTAUTH_URL: "https://auriona.app"
+  LOG_LEVEL: "info"
+
+---
+# Secret for sensitive data
+apiVersion: v1
+kind: Secret
+metadata:
+  name: auriona-secrets
+  namespace: auriona
+type: Opaque
+data:
+  DATABASE_URL: cG9zdGdyZXM6Ly91c2VyOnBhc3NAcG9zdGdyZXM6NTQzMi9hdXJpb25h  # base64 encoded
+  NEXTAUTH_SECRET: YWJjZDEyMzQ1Njc4OWZnaGlqa2xtbm9wcXJzdHV2d3h5egA=  # base64 encoded
+  REDIS_URL: cmVkaXM6Ly9yZWRpczo2Mzc5  # base64 encoded
+
+---
+# Deployment for Next.js Application
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auriona-app
+  namespace: auriona
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: auriona
+      tier: app
+  template:
+    metadata:
+      labels:
+        app: auriona
+        tier: app
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - auriona
+              topologyKey: kubernetes.io/hostname
+      
+      containers:
+      - name: auriona
+        image: ghcr.io/amank326/auriona-x-project:latest
+        imagePullPolicy: Always
+        
+        ports:
+        - name: http
+          containerPort: 3000
+          protocol: TCP
+        
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: auriona-config
+              key: NODE_ENV
+        
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: auriona-secrets
+              key: DATABASE_URL
+        
+        - name: NEXTAUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: auriona-secrets
+              key: NEXTAUTH_SECRET
+        
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: auriona-secrets
+              key: REDIS_URL
+        
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+          limits:
+            cpu: 500m
+            memory: 1Gi
+        
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 2
+        
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: nextjs-cache
+          mountPath: /.next/cache
+      
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: nextjs-cache
+        emptyDir: {}
+
+---
+# Service for Next.js Application
+apiVersion: v1
+kind: Service
+metadata:
+  name: auriona-service
+  namespace: auriona
+spec:
+  type: LoadBalancer
+  selector:
+    app: auriona
+    tier: app
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+    protocol: TCP
+
+---
+# HorizontalPodAutoscaler
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: auriona-hpa
+  namespace: auriona
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: auriona-app
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 15
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 15
+      - type: Pods
+        value: 2
+        periodSeconds: 15
+      selectPolicy: Max
+
+---
+# Network Policy for security
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: auriona-network-policy
+  namespace: auriona
+spec:
+  podSelector:
+    matchLabels:
+      app: auriona
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 3000
+  egress:
+  - to:
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP
+      port: 5432
+    - protocol: TCP
+      port: 6379
+    - protocol: TCP
+      port: 443

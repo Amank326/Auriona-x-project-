@@ -34,6 +34,13 @@ export default function AurionaHome() {
       color: "from-pink-600 to-rose-600"
     },
     {
+      icon: Sparkles,
+      title: "Advanced 3D Avatar",
+      description: "Photorealistic AI character with cinematic quality animations and real-time interactions",
+      color: "from-cyan-600 to-blue-600",
+      link: "/avatar-demo"
+    },
+    {
       icon: Globe,
       title: "Global Accessibility",
       description: "Available worldwide, breaking barriers to mental health support",
@@ -93,6 +100,12 @@ export default function AurionaHome() {
             </Link>
             <Link href="#mission" className="text-sm hover:text-purple-600 transition">
               Mission
+            </Link>
+            <Link href="/avatar-demo" className="text-sm hover:text-cyan-500 transition font-medium text-cyan-400">
+              AI Avatar
+            </Link>
+            <Link href="/avatar-ai" className="text-sm hover:text-purple-600 transition">
+              Chat
             </Link>
             <Link href="/resources" className="text-sm hover:text-purple-600 transition">
               Resources
@@ -320,6 +333,12 @@ export default function AurionaHome() {
                 </div>
                 <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
+                
+                {feature.link && (
+                  <div className="mt-4 flex items-center gap-2 text-cyan-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                    Learn More <ArrowRight className="w-4 h-4" />
+                  </div>
+                )}
                 
                 {/* Hover Effect */}
                 <div className={`absolute inset-0 bg-gradient-to-r ${feature.color} opacity-0 group-hover:opacity-5 rounded-2xl transition-opacity`} />
