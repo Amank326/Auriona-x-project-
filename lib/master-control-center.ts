@@ -58,7 +58,7 @@ export class MasterControlCenter {
   private vectorDB: AdvancedVectorDatabase;
   private mlOrchestrator: AdvancedMLOrchestrator;
   private deploymentAgent: AutonomousDeploymentAgent;
-  private claudeClient: Anthropic;
+  private claudeClient: InstanceType<typeof Anthropic> | null;
 
   private systemAlerts: SystemAlert[] = [];
   private actionHistory: Array<{ system: string; action: string; result: string; timestamp: Date }> = [];

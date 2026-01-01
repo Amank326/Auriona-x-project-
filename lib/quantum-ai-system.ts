@@ -72,7 +72,7 @@ interface QuantumOptimization {
  * QUANTUM AI ENGINE - Self-Healing, Self-Improving Intelligence
  */
 export class QuantumAISystem {
-  private claudeClient: Anthropic;
+  private claudeClient: InstanceType<typeof Anthropic> | null;
   private codeHistory: Map<string, string[]> = new Map();
   private performanceMetrics: Map<string, number[]> = new Map();
   private anomalyBaseline: Map<string, number> = new Map();

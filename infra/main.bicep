@@ -2,6 +2,8 @@ param location string = resourceGroup().location
 param environment string = 'dev'
 param appName string = 'auriona'
 param imageName string = ''
+@secure()
+param pgAdminPassword string
 
 // Environment-specific variables
 var appServicePlanSku = environment == 'prod' ? 'P2V2' : 'B2'
@@ -71,13 +73,13 @@ resource postgresqlServer 'Microsoft.DBforPostgreSQL/servers@2017-12-01' = {
     createMode: 'Default'
     version: '11'
     administratorLogin: 'pgadmin'
-    administratorLoginPassword: uniqueString(resourceGroup().id)
+    administratorLoginPassword: pgAdminPassword
     storageProfile: {
       storageMB: environment == 'prod' ? 204800 : 51200
       backupRetentionDays: environment == 'prod' ? 30 : 7
       geoRedundantBackup: environment == 'prod' ? 'Enabled' : 'Disabled'
     }
-    sslEnforcement: 'ENABLED'
+    sslEnforcement: 'Enabled'
     minimalTlsVersion: minTlsVersion
   }
   tags: commonTags
@@ -180,7 +182,6 @@ resource appService 'Microsoft.Web/sites@2021-02-01' = {
       ]
     }
     httpsOnly: true
-    publicNetworkAccessEnabled: true
   }
   tags: commonTags
 }
