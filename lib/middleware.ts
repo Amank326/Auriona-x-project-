@@ -47,7 +47,7 @@ export async function rateLimit(
 export async function requireAuth(request: NextRequest) {
   const session = await getServerSession(authOptions)
 
-  if (!session?.user?.id) {
+  if (!session?.user?.email) {
     return NextResponse.json(
       { error: 'Unauthorized' },
       { status: 401 }

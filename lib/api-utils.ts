@@ -146,7 +146,8 @@ export async function validateBody<T>(
   try {
     const body = await request.json()
 
-    for (const [key, rules] of Object.entries(schema)) {
+    for (const [key, rule] of Object.entries(schema)) {
+      const rules = rule as any
       const value = body[key]
 
       if (rules.required && (value === undefined || value === null || value === '')) {

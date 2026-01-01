@@ -1,10 +1,11 @@
-# Multi-stage production-ready Dockerfile
-FROM node:18-alpine AS dependencies
+# Multi-stage production-ready Dockerfile with vulnerability fixes
+FROM node:20-alpine AS dependencies
 
 WORKDIR /app
 
 # Install build dependencies
-RUN apk add --no-cache python3 make g++
+RUN apk add --no-cache python3 make g++ && \
+    apk add --no-cache --upgrade alpine-base
 
 # Copy package files
 COPY package*.json ./
@@ -13,7 +14,7 @@ COPY package*.json ./
 RUN npm ci --legacy-peer-deps
 
 # Build stage
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -30,7 +31,7 @@ RUN npx prisma generate
 RUN npm run build
 
 # Production stage
-FROM node:18-alpine AS production
+FROM node:20-alpine AS production
 
 WORKDIR /app
 

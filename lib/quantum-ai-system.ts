@@ -13,7 +13,13 @@
  * - Continuous knowledge base updates
  */
 
-import Anthropic from "@anthropic-ai/sdk";
+// Anthropic SDK import - optional for advanced features
+let Anthropic: any = null;
+try {
+  Anthropic = require("@anthropic-ai/sdk").default;
+} catch (e) {
+  // Claude integration optional - system works without it
+}
 
 interface CodeIssue {
   file: string;
@@ -176,7 +182,16 @@ export class QuantumAISystem {
     ];
 
     advancedFeatures.forEach((feature) => {
-      this.featureKnowledgeBase.set(feature.name, feature);
+      const normalizedFeature: FeatureRecommendation = {
+        name: feature.name,
+        description: feature.description,
+        priority: feature.priority,
+        estimatedImpact: (feature.estimatedImpact as "high" | "medium" | "low"),
+        implementationSteps: feature.implementationSteps,
+        requiredLibraries: feature.requiredLibraries,
+        estimatedLines: feature.estimatedLines,
+      };
+      this.featureKnowledgeBase.set(feature.name, normalizedFeature);
     });
   }
 

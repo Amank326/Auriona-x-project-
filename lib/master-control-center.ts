@@ -16,7 +16,13 @@ import AutonomousSelfImprovingAgent from "./autonomous-agent";
 import AdvancedVectorDatabase from "./vector-database";
 import AdvancedMLOrchestrator from "./ml-orchestrator";
 import AutonomousDeploymentAgent from "./deployment-agent";
-import Anthropic from "@anthropic-ai/sdk";
+// Anthropic SDK import - optional for advanced features
+let Anthropic: any = null;
+try {
+  Anthropic = require("@anthropic-ai/sdk").default;
+} catch (e) {
+  // Claude integration optional - system works without it
+}
 
 interface SystemAlert {
   severity: "critical" | "high" | "medium" | "low";

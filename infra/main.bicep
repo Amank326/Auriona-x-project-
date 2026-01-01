@@ -5,7 +5,6 @@ param imageName string = ''
 
 // Environment-specific variables
 var appServicePlanSku = environment == 'prod' ? 'P2V2' : 'B2'
-var containerInstances = environment == 'prod' ? 3 : 1
 var enableCDN = environment == 'prod'
 var minTlsVersion = '1.2'
 
@@ -24,7 +23,6 @@ var commonTags = {
   environment: environment
   application: appName
   managedBy: 'bicep'
-  createdDate: utcNow('u')
 }
 
 // Application Insights
@@ -73,7 +71,7 @@ resource postgresqlServer 'Microsoft.DBforPostgreSQL/servers@2017-12-01' = {
     createMode: 'Default'
     version: '11'
     administratorLogin: 'pgadmin'
-    administratorLoginPassword: 'ChangeMe${uniqueString(resourceGroup().id)}!'
+    administratorLoginPassword: uniqueString(resourceGroup().id)
     storageProfile: {
       storageMB: environment == 'prod' ? 204800 : 51200
       backupRetentionDays: environment == 'prod' ? 30 : 7
