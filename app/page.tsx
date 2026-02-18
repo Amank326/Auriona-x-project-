@@ -5,8 +5,12 @@ import { motion } from "framer-motion"
 import { Brain, Heart, Sparkles, Users, Globe, Shield, Activity, MessageCircle, ArrowRight, Menu, X } from "lucide-react"
 import Link from "next/link"
 import Scene3D from "@/components/Scene3D"
-import Hero3D from "@/components/Hero3D"
+import EnhancedHero3D from "@/components/EnhancedHero3D"
 import AIBot from "@/components/AIBot"
+import GlassmorphicCard from "@/components/GlassmorphicCard"
+import ParallaxSection from "@/components/ParallaxSection"
+import FloatingElements3D from "@/components/FloatingElements3D"
+import AnimatedBackground from "@/components/AnimatedBackground"
 
 export default function AurionaHome() {
   const [scrolled, setScrolled] = useState(false)
@@ -68,8 +72,11 @@ export default function AurionaHome() {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-hidden">
-      {/* 3D Background */}
+      {/* Enhanced 3D Background */}
       <Scene3D />
+      
+      {/* Floating 3D Elements */}
+      <FloatingElements3D />
       
       {/* Navigation */}
       <motion.nav
@@ -259,25 +266,14 @@ export default function AurionaHome() {
             </motion.div>
           </motion.div>
 
-          {/* Right side - 3D Interactive Element */}
+          {/* Right side - Enhanced 3D Interactive Element */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative"
           >
-            <Hero3D />
-            <motion.div
-              animate={{
-                boxShadow: [
-                  "0 0 60px rgba(168, 85, 247, 0.3)",
-                  "0 0 100px rgba(236, 72, 153, 0.4)",
-                  "0 0 60px rgba(168, 85, 247, 0.3)",
-                ],
-              }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute inset-0 rounded-full blur-3xl -z-10"
-            />
+            <EnhancedHero3D />
           </motion.div>
         </div>
 
@@ -300,219 +296,210 @@ export default function AurionaHome() {
 
       {/* Features Section */}
       <section id="features" className="py-20 md:py-32 px-6 md:px-8 relative">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                Advanced Features
-              </span>
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Powered by state-of-the-art AI and designed for enterprise-grade reliability
-            </p>
-          </motion.div>
+        <AnimatedBackground variant="mesh">
+          <div className="max-w-7xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-16"
+            >
+              <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  Advanced Features
+                </span>
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Powered by state-of-the-art AI and designed for enterprise-grade reliability
+              </p>
+            </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
-                className="group relative p-8 bg-card/50 backdrop-blur-sm border border-border rounded-2xl hover:border-purple-600/50 transition-all duration-300"
-              >
-                <div className={`w-14 h-14 bg-gradient-to-r ${feature.color} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                  <feature.icon className="w-7 h-7 text-white" />
-                </div>
-                <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
-                
-                {feature.link && (
-                  <div className="mt-4 flex items-center gap-2 text-cyan-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                    Learn More <ArrowRight className="w-4 h-4" />
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {features.map((feature, index) => (
+                <GlassmorphicCard key={index} delay={index * 0.1} className="p-8 group">
+                  <div className={`w-14 h-14 bg-gradient-to-r ${feature.color} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
+                    <feature.icon className="w-7 h-7 text-white" />
                   </div>
-                )}
-                
-                {/* Hover Effect */}
-                <div className={`absolute inset-0 bg-gradient-to-r ${feature.color} opacity-0 group-hover:opacity-5 rounded-2xl transition-opacity`} />
-              </motion.div>
-            ))}
+                  <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
+                  
+                  {feature.link && (
+                    <div className="mt-4 flex items-center gap-2 text-cyan-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                      Learn More <ArrowRight className="w-4 h-4" />
+                    </div>
+                  )}
+                </GlassmorphicCard>
+              ))}
+            </div>
           </div>
-        </div>
+        </AnimatedBackground>
       </section>
 
       {/* Mission Section */}
-      <section id="mission" className="py-20 md:py-32 px-6 md:px-8 relative bg-gradient-to-b from-purple-600/5 to-transparent">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <span className="text-purple-600 font-semibold text-sm uppercase tracking-wider">Our Mission</span>
-              <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6">
-                Making Mental Health Care
-                <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"> Universally Accessible</span>
-              </h2>
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                Auriona was created to address the global mental health crisis. We believe that everyone deserves 
-                access to high-quality mental health support, regardless of their location, background, or circumstances.
-              </p>
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                Our AI-powered platform combines the latest advances in natural language processing, empathy modeling, 
-                and psychological best practices to provide immediate, compassionate support.
-              </p>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-medium"
-              >
-                Learn More About Our Mission
-              </motion.button>
-            </motion.div>
+      <section id="mission" className="py-20 md:py-32 px-6 md:px-8 relative">
+        <AnimatedBackground variant="dots">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <ParallaxSection speed={0.3}>
+                <motion.div
+                  initial={{ opacity: 0, x: -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                >
+                  <span className="text-purple-600 font-semibold text-sm uppercase tracking-wider">Our Mission</span>
+                  <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6">
+                    Making Mental Health Care
+                    <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"> Universally Accessible</span>
+                  </h2>
+                  <p className="text-muted-foreground leading-relaxed mb-6">
+                    Auriona was created to address the global mental health crisis. We believe that everyone deserves 
+                    access to high-quality mental health support, regardless of their location, background, or circumstances.
+                  </p>
+                  <p className="text-muted-foreground leading-relaxed mb-6">
+                    Our AI-powered platform combines the latest advances in natural language processing, empathy modeling, 
+                    and psychological best practices to provide immediate, compassionate support.
+                  </p>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-medium"
+                  >
+                    Learn More About Our Mission
+                  </motion.button>
+                </motion.div>
+              </ParallaxSection>
 
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <div className="aspect-square rounded-3xl bg-gradient-to-br from-purple-600/20 to-pink-600/20 border border-purple-600/30 flex items-center justify-center relative overflow-hidden">
-                <Globe className="w-32 h-32 text-purple-600/50" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-                
-                {/* Floating Stats */}
+              <ParallaxSection speed={0.5}>
                 <motion.div
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ repeat: Infinity, duration: 3 }}
-                  className="absolute top-8 right-8 px-4 py-3 bg-card/90 backdrop-blur-sm border border-border rounded-xl"
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  className="relative"
                 >
-                  <p className="text-xs text-muted-foreground">Global Impact</p>
-                  <p className="text-2xl font-bold text-green-600">+1M</p>
+                  <GlassmorphicCard className="aspect-square flex items-center justify-center relative overflow-hidden">
+                    <Globe className="w-32 h-32 text-purple-600/50" />
+                    
+                    {/* Floating Stats */}
+                    <motion.div
+                      animate={{ y: [0, -10, 0] }}
+                      transition={{ repeat: Infinity, duration: 3 }}
+                      className="absolute top-8 right-8 px-4 py-3 bg-card/90 backdrop-blur-sm border border-border rounded-xl"
+                    >
+                      <p className="text-xs text-muted-foreground">Global Impact</p>
+                      <p className="text-2xl font-bold text-green-600">+1M</p>
+                    </motion.div>
+                    
+                    <motion.div
+                      animate={{ y: [0, 10, 0] }}
+                      transition={{ repeat: Infinity, duration: 3, delay: 0.5 }}
+                      className="absolute bottom-8 left-8 px-4 py-3 bg-card/90 backdrop-blur-sm border border-border rounded-xl"
+                    >
+                      <p className="text-xs text-muted-foreground">Active Users</p>
+                      <p className="text-2xl font-bold text-purple-600">500K+</p>
+                    </motion.div>
+                  </GlassmorphicCard>
                 </motion.div>
-                
-                <motion.div
-                  animate={{ y: [0, 10, 0] }}
-                  transition={{ repeat: Infinity, duration: 3, delay: 0.5 }}
-                  className="absolute bottom-8 left-8 px-4 py-3 bg-card/90 backdrop-blur-sm border border-border rounded-xl"
-                >
-                  <p className="text-xs text-muted-foreground">Active Users</p>
-                  <p className="text-2xl font-bold text-purple-600">500K+</p>
-                </motion.div>
-              </div>
-            </motion.div>
+              </ParallaxSection>
+            </div>
           </div>
-        </div>
+        </AnimatedBackground>
       </section>
 
       {/* Technology Section */}
       <section id="technology" className="py-20 md:py-32 px-6 md:px-8 relative">
-        <div className="max-w-6xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span className="text-purple-600 font-semibold text-sm uppercase tracking-wider">Technology</span>
-            <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6">
-              Powered by
-              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"> Cutting-Edge AI</span>
-            </h2>
-            <p className="text-muted-foreground max-w-3xl mx-auto mb-12">
-              Auriona leverages advanced neural networks, natural language processing, and empathy modeling 
-              to provide human-like conversations and genuine emotional support.
-            </p>
-
-            <div className="grid md:grid-cols-2 gap-6 text-left">
+        <AnimatedBackground variant="grid">
+          <div className="max-w-6xl mx-auto text-center">
+            <ParallaxSection speed={0.4}>
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="p-8 bg-gradient-to-br from-purple-600/10 to-transparent border border-purple-600/20 rounded-2xl"
               >
-                <h3 className="text-2xl font-bold mb-4">Enterprise-Grade Security</h3>
-                <ul className="space-y-3 text-muted-foreground">
-                  <li className="flex items-start gap-3">
-                    <Shield className="w-5 h-5 text-green-600 mt-0.5" />
-                    <span>End-to-end encryption for all conversations</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <Shield className="w-5 h-5 text-green-600 mt-0.5" />
-                    <span>HIPAA compliant data storage and handling</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <Shield className="w-5 h-5 text-green-600 mt-0.5" />
-                    <span>Regular security audits and penetration testing</span>
-                  </li>
-                </ul>
-              </motion.div>
+                <span className="text-purple-600 font-semibold text-sm uppercase tracking-wider">Technology</span>
+                <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6">
+                  Powered by
+                  <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"> Cutting-Edge AI</span>
+                </h2>
+                <p className="text-muted-foreground max-w-3xl mx-auto mb-12">
+                  Auriona leverages advanced neural networks, natural language processing, and empathy modeling 
+                  to provide human-like conversations and genuine emotional support.
+                </p>
 
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="p-8 bg-gradient-to-br from-pink-600/10 to-transparent border border-pink-600/20 rounded-2xl"
-              >
-                <h3 className="text-2xl font-bold mb-4">Trusted by Leaders</h3>
-                <ul className="space-y-3 text-muted-foreground">
-                  <li className="flex items-start gap-3">
-                    <Sparkles className="w-5 h-5 text-purple-600 mt-0.5" />
-                    <span>Deployed in NASA astronaut support programs</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <Sparkles className="w-5 h-5 text-purple-600 mt-0.5" />
-                    <span>Integrated with ISRO mental wellness initiatives</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <Sparkles className="w-5 h-5 text-purple-600 mt-0.5" />
-                    <span>Used by Fortune 500 companies for employee wellbeing</span>
-                  </li>
-                </ul>
+                <div className="grid md:grid-cols-2 gap-6 text-left">
+                  <GlassmorphicCard className="p-8" delay={0.2}>
+                    <h3 className="text-2xl font-bold mb-4">Enterprise-Grade Security</h3>
+                    <ul className="space-y-3 text-muted-foreground">
+                      <li className="flex items-start gap-3">
+                        <Shield className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                        <span>End-to-end encryption for all conversations</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <Shield className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                        <span>HIPAA compliant data storage and handling</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <Shield className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                        <span>Regular security audits and penetration testing</span>
+                      </li>
+                    </ul>
+                  </GlassmorphicCard>
+
+                  <GlassmorphicCard className="p-8" delay={0.4}>
+                    <h3 className="text-2xl font-bold mb-4">Trusted by Leaders</h3>
+                    <ul className="space-y-3 text-muted-foreground">
+                      <li className="flex items-start gap-3">
+                        <Sparkles className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
+                        <span>Deployed in NASA astronaut support programs</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <Sparkles className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
+                        <span>Integrated with ISRO mental wellness initiatives</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <Sparkles className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
+                        <span>Used by Fortune 500 companies for employee wellbeing</span>
+                      </li>
+                    </ul>
+                  </GlassmorphicCard>
+                </div>
               </motion.div>
-            </div>
-          </motion.div>
-        </div>
+            </ParallaxSection>
+          </div>
+        </AnimatedBackground>
       </section>
 
       {/* CTA Section */}
       <section className="py-20 md:py-32 px-6 md:px-8 relative">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="p-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl relative overflow-hidden"
-          >
-            <div className="relative z-10">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Ready to Transform Your Mental Wellness?
-              </h2>
-              <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
-                Join millions of users worldwide who trust Auriona for their mental health journey
-              </p>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-white text-purple-600 rounded-full font-medium inline-flex items-center gap-2"
+        <ParallaxSection speed={0.6}>
+          <div className="max-w-4xl mx-auto text-center">
+            <GlassmorphicCard 
+              className="p-12 bg-gradient-to-r from-purple-600/20 via-pink-600/20 to-cyan-600/20"
+              hoverEffect={false}
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="relative z-10"
               >
-                Start Your Journey Today
-                <ArrowRight className="w-5 h-5" />
-              </motion.button>
-            </div>
-            
-            {/* Decorative Elements */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
-          </motion.div>
-        </div>
+                <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                  Ready to Transform Your Mental Wellness?
+                </h2>
+                <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
+                  Join millions of users worldwide who trust Auriona for their mental health journey
+                </p>
+                <motion.button
+                  whileHover={{ scale: 1.05, boxShadow: "0 20px 60px rgba(255, 255, 255, 0.3)" }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-8 py-4 bg-white text-purple-600 rounded-full font-medium inline-flex items-center gap-2 shadow-xl"
+                >
+                  Start Your Journey Today
+                  <ArrowRight className="w-5 h-5" />
+                </motion.button>
+              </motion.div>
+            </GlassmorphicCard>
+          </div>
+        </ParallaxSection>
       </section>
 
       {/* Footer */}
