@@ -1,7 +1,7 @@
 "use client"
 
 import { Canvas, useFrame } from "@react-three/fiber"
-import { OrbitControls, Stars, Float, Sphere, MeshDistortMaterial, RoundedBox, Torus, MeshTransmissionMaterial, Sparkles as DreiSparkles, Environment } from "@react-three/drei"
+import { OrbitControls, Stars, Float, Sphere, MeshDistortMaterial, RoundedBox, Torus, MeshTransmissionMaterial, Sparkles as DreiSparkles } from "@react-three/drei"
 import { useRef, useState } from "react"
 import * as THREE from "three"
 import { EffectComposer, Bloom, ChromaticAberration } from "@react-three/postprocessing"
@@ -209,7 +209,6 @@ export default function Scene3D() {
       >
         <color attach="background" args={["#000000"]} />
         <AnimatedBackground />
-        <Environment preset="night" />
         
         {/* Post-processing effects */}
         <EffectComposer>

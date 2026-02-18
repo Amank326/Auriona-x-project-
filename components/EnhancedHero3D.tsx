@@ -1,7 +1,7 @@
 "use client"
 
 import { Canvas, useFrame } from "@react-three/fiber"
-import { Float, Sphere, MeshDistortMaterial, OrbitControls, Environment, Sparkles as DreiSparkles } from "@react-three/drei"
+import { Float, Sphere, MeshDistortMaterial, OrbitControls, Sparkles as DreiSparkles } from "@react-three/drei"
 import { useRef, useState } from "react"
 import * as THREE from "three"
 import { motion } from "framer-motion"
@@ -135,9 +135,6 @@ export default function EnhancedHero3D() {
         {/* 3D Elements */}
         <AnimatedSphere />
         <ParticleSphere />
-        
-        {/* Environment for realistic reflections */}
-        <Environment preset="city" />
         
         {/* Interactive controls */}
         <OrbitControls
