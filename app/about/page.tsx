@@ -3,6 +3,10 @@
 import { motion } from "framer-motion"
 import { Brain, Users, Globe, Shield, Zap, Heart, Award, Target } from "lucide-react"
 import Link from "next/link"
+import GlassmorphicCard from "@/components/GlassmorphicCard"
+import AnimatedBackground from "@/components/AnimatedBackground"
+import MorphingShape3D from "@/components/MorphingShape3D"
+import ParallaxSection from "@/components/ParallaxSection"
 
 export default function AboutPage() {
   const team = [
@@ -20,7 +24,9 @@ export default function AboutPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
+      {/* Background Effects */}
+      <AnimatedBackground variant="mesh" />
       {/* Header */}
       <motion.nav
         initial={{ y: -100 }}
@@ -63,7 +69,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values */}
-      <section className="pb-20 px-6 md:px-8">
+      <section className="pb-20 px-6 md:px-8 relative z-10">
         <div className="max-w-7xl mx-auto">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -76,19 +82,11 @@ export default function AboutPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((value, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.05 }}
-                className="p-6 bg-card border border-border rounded-2xl hover:border-purple-600/50 transition"
-              >
+              <GlassmorphicCard key={index} delay={index * 0.1} className="p-6">
                 <value.icon className="w-12 h-12 text-purple-600 mb-4" />
                 <h3 className="text-xl font-bold mb-2">{value.title}</h3>
                 <p className="text-muted-foreground text-sm">{value.desc}</p>
-              </motion.div>
+              </GlassmorphicCard>
             ))}
           </div>
         </div>
