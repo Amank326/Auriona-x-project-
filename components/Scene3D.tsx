@@ -4,6 +4,8 @@ import { Canvas, useFrame } from "@react-three/fiber"
 import { OrbitControls, Stars, Float, Sphere, MeshDistortMaterial, RoundedBox, Torus, MeshTransmissionMaterial, Sparkles as DreiSparkles } from "@react-three/drei"
 import { useRef, useState } from "react"
 import * as THREE from "three"
+import { EffectComposer, Bloom, ChromaticAberration } from "@react-three/postprocessing"
+import { BlendFunction } from "postprocessing"
 
 function FloatingOrb({ position, color, scale }: { position: [number, number, number]; color: string; scale: number }) {
   const meshRef = useRef<THREE.Mesh>(null)
@@ -205,7 +207,24 @@ export default function Scene3D() {
         dpr={[1, 2]}
         gl={{ antialias: true, alpha: true }}
       >
+        {/* Using CSS variable for background color from theme */}
+        <color attach="background" args={["oklch(0.08 0 0)"]} />
         <AnimatedBackground />
+        
+        {/* Post-processing effects - configurable via props if needed */}
+        <EffectComposer>
+          <Bloom 
+            intensity={0.5} 
+            luminanceThreshold={0.3} 
+            luminanceSmoothing={0.9}
+            blendFunction={BlendFunction.SCREEN}
+          />
+          <ChromaticAberration
+            offset={[0.001, 0.001]}
+            blendFunction={BlendFunction.NORMAL}
+          />
+        </EffectComposer>
+        
         <OrbitControls 
           enableZoom={false} 
           enablePan={false} 

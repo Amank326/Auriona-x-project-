@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from "framer-motion"
 import AdvancedAIAvatar from "@/components/AdvancedAIAvatar"
 import Link from "next/link"
 import { ChevronRight, Sparkles, Zap, Eye } from "lucide-react"
+import GlassmorphicCard from "@/components/GlassmorphicCard"
+import FloatingElements3D from "@/components/FloatingElements3D"
+import AnimatedBackground from "@/components/AnimatedBackground"
 
 export default function AvatarDemo() {
   const [selectedFeature, setSelectedFeature] = useState<"photorealistic" | "cinematic" | "interactive">(
@@ -60,7 +63,10 @@ export default function AvatarDemo() {
   const currentFeature = features.find((f) => f.id === selectedFeature)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-black">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-black relative overflow-hidden">
+      {/* Background Effects */}
+      <FloatingElements3D />
+      <AnimatedBackground variant="mesh" />
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-black bg-opacity-40 backdrop-blur-lg border-b border-cyan-500 border-opacity-20">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -98,14 +104,14 @@ export default function AvatarDemo() {
 
         {/* Main Avatar Display */}
         <motion.section
-          className="max-w-6xl mx-auto px-4 mb-16"
+          className="max-w-6xl mx-auto px-4 mb-16 relative z-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <div className="rounded-2xl overflow-hidden border border-cyan-500 border-opacity-30 shadow-2xl">
+          <GlassmorphicCard className="overflow-hidden">
             <AdvancedAIAvatar speaking={speaking} interactive={true} />
-          </div>
+          </GlassmorphicCard>
 
           {/* Control Buttons */}
           <div className="flex gap-4 justify-center mt-6">
@@ -144,67 +150,71 @@ export default function AvatarDemo() {
 
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             {features.map((feature, idx) => (
-              <motion.button
+              <GlassmorphicCard
                 key={feature.id}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setSelectedFeature(feature.id as any)}
-                className={`p-6 rounded-xl border-2 text-left transition-all ${
+                delay={idx * 0.1}
+                className={`p-6 text-left transition-all cursor-pointer ${
                   selectedFeature === feature.id
-                    ? "bg-cyan-500 bg-opacity-30 border-cyan-500"
-                    : "bg-white bg-opacity-5 border-gray-600 hover:border-cyan-500"
+                    ? "border-2 border-cyan-500"
+                    : ""
                 }`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1 }}
               >
-                <div className="flex items-start gap-3 mb-2">
-                  {feature.id === "photorealistic" && (
-                    <Eye className="w-6 h-6 text-cyan-400 flex-shrink-0" />
-                  )}
-                  {feature.id === "cinematic" && (
-                    <Sparkles className="w-6 h-6 text-purple-400 flex-shrink-0" />
-                  )}
-                  {feature.id === "interactive" && (
-                    <Zap className="w-6 h-6 text-yellow-400 flex-shrink-0" />
-                  )}
-                  <div>
-                    <h3 className="text-lg font-bold text-white">{feature.title}</h3>
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setSelectedFeature(feature.id as any)}
+                  className="w-full text-left"
+                >
+                  <div className="flex items-start gap-3 mb-2">
+                    {feature.id === "photorealistic" && (
+                      <Eye className="w-6 h-6 text-cyan-400 flex-shrink-0" />
+                    )}
+                    {feature.id === "cinematic" && (
+                      <Sparkles className="w-6 h-6 text-purple-400 flex-shrink-0" />
+                    )}
+                    {feature.id === "interactive" && (
+                      <Zap className="w-6 h-6 text-yellow-400 flex-shrink-0" />
+                    )}
+                    <div>
+                      <h3 className="text-lg font-bold text-white">{feature.title}</h3>
+                    </div>
                   </div>
-                </div>
-                <p className="text-sm text-gray-300 line-clamp-2">{feature.description}</p>
-              </motion.button>
+                  <p className="text-sm text-gray-300 line-clamp-2">{feature.description}</p>
+                </motion.button>
+              </GlassmorphicCard>
             ))}
           </div>
 
           {/* Feature Details */}
           <AnimatePresence mode="wait">
             {currentFeature && (
-              <motion.div
+              <GlassmorphicCard
                 key={selectedFeature}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                className="bg-gradient-to-br from-cyan-500 from-opacity-10 to-purple-500 to-opacity-10 border border-cyan-500 border-opacity-30 rounded-2xl p-8"
+                className="p-8"
               >
-                <h3 className="text-2xl font-bold text-white mb-4">{currentFeature.title}</h3>
-                <p className="text-gray-300 mb-6">{currentFeature.description}</p>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                >
+                  <h3 className="text-2xl font-bold text-white mb-4">{currentFeature.title}</h3>
+                  <p className="text-gray-300 mb-6">{currentFeature.description}</p>
 
-                <div className="grid md:grid-cols-2 gap-4">
-                  {currentFeature.details.map((detail, idx) => (
-                    <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.05 }}
-                      className="flex items-center gap-3 p-3 rounded-lg bg-white bg-opacity-5"
-                    >
-                      <div className="w-2 h-2 bg-cyan-400 rounded-full" />
-                      <span className="text-gray-200">{detail}</span>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {currentFeature.details.map((detail, idx) => (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.05 }}
+                        className="flex items-center gap-3 p-3 rounded-lg bg-white bg-opacity-5"
+                      >
+                        <div className="w-2 h-2 bg-cyan-400 rounded-full" />
+                        <span className="text-gray-200">{detail}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              </GlassmorphicCard>
             )}
           </AnimatePresence>
         </motion.section>
