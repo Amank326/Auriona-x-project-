@@ -21,9 +21,10 @@ function MorphingSphere({ color = "#a855f7", speed = 1 }: MorphingShapeProps) {
     }
     
     if (materialRef.current) {
-      // Morphing effect - changing distortion over time
-      materialRef.current.distort = 0.3 + Math.sin(state.clock.getElapsedTime() * speed) * 0.3
-      materialRef.current.speed = 2 + Math.sin(state.clock.getElapsedTime() * 0.5) * 1
+      // Morphing effect - performance optimized with smoother calculations
+      const time = state.clock.getElapsedTime() * speed
+      materialRef.current.distort = 0.3 + Math.sin(time) * 0.3
+      materialRef.current.speed = 2 + Math.sin(time * 0.5) * 1
     }
   })
 

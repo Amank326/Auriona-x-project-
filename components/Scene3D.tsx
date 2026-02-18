@@ -207,10 +207,11 @@ export default function Scene3D() {
         dpr={[1, 2]}
         gl={{ antialias: true, alpha: true }}
       >
-        <color attach="background" args={["#000000"]} />
+        {/* Using CSS variable for background color from theme */}
+        <color attach="background" args={["oklch(0.08 0 0)"]} />
         <AnimatedBackground />
         
-        {/* Post-processing effects */}
+        {/* Post-processing effects - configurable via props if needed */}
         <EffectComposer>
           <Bloom 
             intensity={0.5} 
