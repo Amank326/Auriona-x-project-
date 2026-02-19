@@ -40,7 +40,7 @@ export default function GlassmorphicCard({
         position: "relative",
         overflow: "hidden",
         transform: "translateZ(0)",
-        willChange: "transform"
+        ...(hover ? { willChange: "transform" } : {})
       }}
     >
       {/* Animated gradient overlay */}

@@ -15,7 +15,7 @@ function FloatingOrb({ position, color, scale }: { position: [number, number, nu
       floatIntensity={1}
       floatingRange={[-0.5, 0.5]}
     >
-      <Sphere args={[scale, 64, 64]} position={position} ref={meshRef}>
+      <Sphere args={[scale, 32, 32]} position={position} ref={meshRef}>
         <MeshDistortMaterial
           color={color}
           attach="material"
